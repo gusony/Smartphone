@@ -89,6 +89,7 @@
     
         window.mac = Math.random().toString().slice(2);
         window.d_name = null;
+        var show_dname_one_time = 0;
 
         var interval = 1000;
         var accur = 10;
@@ -189,7 +190,7 @@
         }
 
 	if(!("vibrate" in navigator))
-        alert("Your browser don't support Vibration\n" );
+            alert("Your browser don't support Vibration\n" );
 
         
         requestAnimationFrame(domUpdater);
@@ -227,7 +228,13 @@
         
         
         // IoTtalk updater
-        function iotUpdater() {
+        function iotUpdater(ret) {
+            if(show_dname_one_time ==0 && ret['d_name']!=null){
+                console.log(ret['d_name']);
+                $('main > h2').text(ret['d_name']);
+                show_dname_one_time = 1;
+            }
+        
             if( window.d_name ){
                 csmPush('Acceleration', [acc.x, acc.y, acc.z]);
                 csmPush('Gyroscope', [gyro.x, gyro.y, gyro.z]);

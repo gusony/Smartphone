@@ -2,35 +2,36 @@
 var id ='sp-';
 var endPoint = 'http://140.113.215.7:9999/';
 var timestamp = {};
+var msg = {};
 
 const csmRegister = function(pf, callback) {
-  id += btoa(Math.random()).substring(1, 10);
-  if (pf.is_sim == undefined){
-    pf.is_sim = false;
-  }
-  if (pf.d_name == undefined){
-    pf.d_name = (Math.floor(Math.random() * 99)).toString() + '.' + pf.dm_name ;
-  }
-  $.ajax({
-    url: endPoint + id,
-    type: 'POST',
-    data: JSON.stringify({profile: pf}),
-    //dataType: 'json',
-    contentType: 'application/json',
-    success: function () {
-      document.title = pf.d_name;
-      window.onunload = csmDelete;
-      window.onbeforeunload = csmDelete;
-      window.onclose = csmDelete;
-      window.onpagehide = csmDelete;
-      callback();
-    },
-    error: function (a,b,c) {
-      alert('register fail');
+    id += btoa(Math.random()).substring(1, 10);
+    if (pf.is_sim == undefined){
+        pf.is_sim = false;
     }
-  }).done(function(){
+    if (pf.d_name == undefined){
+        pf.d_name = (Math.floor(Math.random() * 99)).toString() + '.' + pf.dm_name ;
+    }
+    $.ajax({
+        url: endPoint + id,
+        type: 'POST',
+        data: JSON.stringify({profile: pf}),
+        //dataType: 'json',
+        contentType: 'application/json',
+        success: function (msg) {
+            document.title = pf.d_name;
+            window.onunload = csmDelete;
+            window.onbeforeunload = csmDelete;
+            window.onclose = csmDelete;
+            window.onpagehide = csmDelete;
+            callback(msg);
+        },
+        error: function (a,b,c) {
+            alert('register fail');
+        }
+    }).done(function(){
         csmPush ('__Ctl_I__',['SET_DF_STATUS_RSP',{'cmd_params':[]}])
-  });
+    });
 };
 
 
