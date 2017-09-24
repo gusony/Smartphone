@@ -1,3 +1,16 @@
+ <!--        <section><span>&nbsp;</span></section>
+        <section> <h6>Geolocation</h6></section>
+        <section id="G_lat">
+            <label><i>lat</i></label>
+            <span></span></section>
+        <section id="G_lon">
+            <label><i>lon</i></label>
+            <span></span></section>
+        <section id="G_alt">
+            <label><i>alt</i></label>
+            <span></span></section>
+-->	
+
  <!--
  /*var canVibrate = "vibrate" in navigator || "mozVibrate" in navigator;
         if (canVibrate && !("vibrate" in navigator)){
@@ -16,5 +29,49 @@
             alert("vibration not be supported ");
 */
 -->
+<script type="text/javascript" >
+/*var lat_Dom =    $('#G_lat > span');
+        var lon_Dom =    $('#G_lon > span');
+        var alt_Dom =    $('#G_alt > span');
+        var acc_Dom =    $('#G_acc > span');
+        var altacc_Dom = $('#G_altacc > span');
+        var hea_Dom =    $('#G_hea > span');
+        var spe_Dom =    $('#G_spe > span');
+      */ 
+        
+        /*
+        window.addEventListener('deviceorientation', function handleOrientation(event) {
+            var oa = event.alpha||0;
+            var ob = event.beta||0;
+            var og = event.gamma||0;
+            var compassdisc = document.getElementById("compassDiscImg");
+            
+            if(event.webkitCompassHeading){
+                orient.oc = Math.ceil(event.webkitCompassHeading) || 0;  // oc: orientation compass
+                compassdisc.style.webkittransform = "rotate("+ (360-orient.oc) +"deg)";
+                compassdisc.style.moztransform = "rotate("+ (360-orient.oc) +"deg)";
+                compassdisc.style.transform = "rotate("+ (360-orient.oc) +"deg)";
+            }
+
+			
+            orient.x = (Math.round(oa*accur) / accur);
+            orient.y = (Math.round(ob*accur) / accur);
+            orient.z = (Math.round(og*accur) / accur);
+        });
+*/
+	
+/*if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                GEO.latitude = position.coords.latitude;
+                GEO.longitude = position.coords.longitude;
+                GEO.altitude = position.coords.altitude;
+            });
+        }
+*/
+        
+        /*lat_Dom.text(GEO.latitude);
+            lon_Dom.text(GEO.longitude);
+            alt_Dom.text(GEO.altitude);*/
+</script>
 
 

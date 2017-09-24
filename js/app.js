@@ -1,6 +1,6 @@
 /*==JS VERSION 1==*/
 var id ='sp-';
-var endPoint = 'http://140.113.215.7:9999/';
+var endPoint = 'https://smartphone.iottalk.tw/csm/';
 var timestamp = {};
 var msg = {};
 

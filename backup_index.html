@@ -50,7 +50,18 @@
             <label><i>&gamma;</i></label>
             <span></span></section>
 
-	
+        <section><span>&nbsp;</span></section>
+        <section> <h6>Geolocation</h6></section>
+        <section id="G_lat">
+            <label><i>lat</i></label>
+            <span></span></section>
+        <section id="G_lon">
+            <label><i>lon</i></label>
+            <span></span></section>
+        <section id="G_alt">
+            <label><i>alt</i></label>
+            <span></span></section>
+		
         <section><span>&nbsp;</span></section>
         <section><h6>Compass</h6></section>
         <section id="Magdec">  <!-- Magnetic declination  -->
@@ -102,7 +113,18 @@
         var OyDom = $('#Oy > span');
         var OzDom = $('#Oz > span');
         var mag_Dom =    $('#Magdec > span');
-         
+        var lat_Dom =    $('#G_lat > span');
+        var lon_Dom =    $('#G_lon > span');
+        var alt_Dom =    $('#G_alt > span');
+        var acc_Dom =    $('#G_acc > span');
+        var altacc_Dom = $('#G_altacc > span');
+        var hea_Dom =    $('#G_hea > span');
+        var spe_Dom =    $('#G_spe > span');
+
+       
+        
+        
+        
         
         window.ondevicemotion = function(event) {
             var ax = event.accelerationIncludingGravity.x || 0;
@@ -119,32 +141,61 @@
             gyro.y = Math.round(ra*accur) / accur;
             gyro.z = Math.round(rb*accur) / accur;
         }
-
+/*
     function handleOrientation(event) {
-            /*
             var oa = event.alpha||0;
             var ob = event.beta||0;
             var og = event.gamma||0;
-       */
             var compassdisc = document.getElementById("compassDiscImg");
-            
-            if(event.webkitCompassHeading)
-                orient.oc = Math.ceil(event.webkitCompassHeading) || 0;  // oc: orientation compass
+            if(event.webkitCompassHeading){
+                orient.oc = Math.ceil(event.webkitCompassHeading) || "No support";  // oc: orientation compass
+                compassdisc.style.webkittransform = "rotate("+ (360-orient.oc) +"deg)";
+                compassdisc.style.moztransform = "rotate("+ (360-orient.oc) +"deg)";
+                compassdisc.style.transform = "rotate("+ (360-orient.oc) +"deg)";
+            }
             else
-                orient.oc =  (Math.round((event.alpha||0)*accur) / accur);
+                orient.oc =  "No support";
 			
-            orient.x = (Math.round((event.alpha||0)*accur) / accur);
-            orient.y = (Math.round((event.beta  ||0)*accur) / accur);
-            orient.z = (Math.round((event.gamma||0)*accur) / accur);
-            compassdisc.style.webkittransform = "rotate("+ (360-orient.oc) +"deg)";
-            compassdisc.style.moztransform = "rotate("+ (360-orient.oc) +"deg)";
-            compassdisc.style.transform = "rotate("+ (360-orient.oc) +"deg)";
+            orient.x = (Math.round(oa*accur) / accur);
+            orient.y = (Math.round(ob*accur) / accur);
+            orient.z = (Math.round(og*accur) / accur);
         }
         window.addEventListener('deviceorientation', handleOrientation);
-      
+        */
+        window.addEventListener('deviceorientation', function handleOrientation(event) {
+            var oa = event.alpha||0;
+            var ob = event.beta||0;
+            var og = event.gamma||0;
+            var compassdisc = document.getElementById("compassDiscImg");
+            
+            if(event.webkitCompassHeading){
+                orient.oc = Math.ceil(event.webkitCompassHeading) || 0;  // oc: orientation compass
+                compassdisc.style.webkittransform = "rotate("+ (360-orient.oc) +"deg)";
+                compassdisc.style.moztransform = "rotate("+ (360-orient.oc) +"deg)";
+                compassdisc.style.transform = "rotate("+ (360-orient.oc) +"deg)";
+            }
 
-	if(!("vibrate" in navigator))//if(navigator.vibrate(1000))
+			
+            orient.x = (Math.round(oa*accur) / accur);
+            orient.y = (Math.round(ob*accur) / accur);
+            orient.z = (Math.round(og*accur) / accur);
+        });
+	
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                GEO.latitude = position.coords.latitude;
+                GEO.longitude = position.coords.longitude;
+                GEO.altitude = position.coords.altitude;
+            });
+        }
+
+	if(!("vibrate" in navigator))
             alert("Your browser don't support Vibration\n" );
+
+        
+        requestAnimationFrame(domUpdater);
+        
+        
 
         // Dom updater
         function domUpdater() {
@@ -159,12 +210,15 @@
             OxDom.text(orient.x);
             OyDom.text(orient.y);
             OzDom.text(orient.z);
+
+            lat_Dom.text(GEO.latitude);
+            lon_Dom.text(GEO.longitude);
+            alt_Dom.text(GEO.altitude);
+
             mag_Dom.text(orient.oc);
-            
+
             requestAnimationFrame(domUpdater);
         }
-        requestAnimationFrame(domUpdater);
-        
         // IoTtalk register
         var profile = {
             'dm_name': 'Smartphone',
@@ -175,30 +229,33 @@
         
         // IoTtalk updater
         function iotUpdater(ret) {
-            if(show_dname_one_time ==0 && window.d_name == null ){
+            if( window.d_name != null ){
+                if(show_dname_one_time ==0 ){
                     window.d_name = ret['d_name'];
                     console.log(ret['d_name']);
                     $('main > h2').text(ret['d_name']);
                     show_dname_one_time = 1;
                 }
-                
-            if( window.d_name != null ){
+
                 csmPush('Acceleration', [acc.x, acc.y, acc.z]);
                 csmPush('Gyroscope', [gyro.x, gyro.y, gyro.z]);
                 csmPush('Orientation', [orient.x, orient.y, orient.z, orient.oc]);
             }
-            
             setTimeout(iotUpdater, interval);
         }
         
+        
+        
         function vibrationhandler(value){
-            if(value >0  )
-                navigator.vibrate(value * 100);
+            if(value >0)
+                navigator.vibrate(1000);
             setTimeout(csmPull("Vibration",vibrationhandler) , interval);
         }
-        setTimeout(csmPull("Vibration",vibrationhandler) , interval);
         
-        
+        if( window.d_name != null ){
+            setTimeout(csmPull("Vibration",vibrationhandler) , interval);
+            setTimeout(iotUpdater, interval);
+        }
         //vibrationhandler(0);
         
         
