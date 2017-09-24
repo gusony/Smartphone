@@ -49,7 +49,19 @@
         <section id="Oz">
             <label><i>&gamma;</i></label>
             <span></span></section>
-
+            
+        <section><span>&nbsp;</span></section>
+        <section> <h6>Geolocation</h6></section>
+        <section id="G_lat">
+            <label><i>lat</i></label>
+            <span></span></section>
+        <section id="G_lon">
+            <label><i>lon</i></label>
+            <span></span></section>
+        <section id="G_alt">
+            <label><i>alt</i></label>
+            <span></span></section>
+            
 	
         <section><span>&nbsp;</span></section>
         <section><h6>Compass</h6></section>
@@ -102,6 +114,9 @@
         var OyDom = $('#Oy > span');
         var OzDom = $('#Oz > span');
         var mag_Dom =    $('#Magdec > span');
+        var lat_Dom =    $('#G_lat > span');
+        var lon_Dom =    $('#G_lon > span');
+        var alt_Dom =    $('#G_alt > span');
          
         
         window.ondevicemotion = function(event) {
@@ -146,6 +161,14 @@
 	if(!("vibrate" in navigator))//if(navigator.vibrate(1000))
             alert("Your browser don't support Vibration\n" );
 
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                GEO.latitude = position.coords.latitude;
+                GEO.longitude = position.coords.longitude;
+                GEO.altitude = position.coords.altitude;
+            });
+        }
+        
         // Dom updater
         function domUpdater() {
             AxDom.text(acc.x);
@@ -160,6 +183,10 @@
             OyDom.text(orient.y);
             OzDom.text(orient.z);
             mag_Dom.text(orient.oc);
+            
+            lat_Dom.text(GEO.latitude);
+            lon_Dom.text(GEO.longitude);
+            alt_Dom.text(GEO.altitude);
             
             requestAnimationFrame(domUpdater);
         }
