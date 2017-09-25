@@ -136,11 +136,6 @@
         }
 
     function handleOrientation(event) {
-            /*
-            var oa = event.alpha||0;
-            var ob = event.beta||0;
-            var og = event.gamma||0;
-       */
             var compassdisc = document.getElementById("compassDiscImg");
             
             if(event.webkitCompassHeading)
@@ -163,9 +158,9 @@
 
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function(position) {
-                GEO.latitude = position.coords.latitude;
-                GEO.longitude = position.coords.longitude;
-                GEO.altitude = position.coords.altitude;
+                GEO.latitude = position.coords.latitude||0;
+                GEO.longitude = position.coords.longitude||0;
+                GEO.altitude = position.coords.altitude||0;
             });
         }
         
