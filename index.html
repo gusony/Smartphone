@@ -153,7 +153,7 @@
         window.addEventListener('deviceorientation', handleOrientation);
       
 
-	if(!("vibrate" in navigator))//if(navigator.vibrate(1000))
+	    if(!("vibrate" in navigator))//if(navigator.vibrate(1000))
             alert("Your browser don't support Vibration\n" );
 
         if (navigator.geolocation) {
@@ -163,6 +163,8 @@
                 GEO.altitude = position.coords.altitude||0;
             });
         }
+        else
+            alert("Not Support GPS");
         
         // Dom updater
         function domUpdater() {
