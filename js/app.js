@@ -1,6 +1,6 @@
 /*==JS VERSION 1==*/
 var id ='sp-';
-var endPoint = 'https://smartphone.iottalk.tw/csm/';
+var endPoint ='https://'+window.location.hostname+'/csm/';
 var timestamp = {};
 var msg = {};
 
@@ -49,7 +49,6 @@ const csmPull = function(df, handler) {
       else {
         value = data.samples[0][1];
       }
-      console.log(value);
     }
     handler(value);
   }
