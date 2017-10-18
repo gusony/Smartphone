@@ -1,6 +1,6 @@
 /*==JS VERSION 1==*/
 var id ='sp-';
-var endPoint ='https://'+window.location.hostname+':9999/' ;//'https://test.iottalk.tw/'
+var endPoint = window.location.origin + '/';
 var timestamp = {};
 var msg = {};
 
@@ -27,7 +27,6 @@ const csmRegister = function(pf, callback) {
             callback(msg);
         },
         error: function (a,b,c) {
-	    console.log(a,b,c)
             alert('register fail');
         }
     }).done(function(){

@@ -65,10 +65,12 @@
 	
         <section><span>&nbsp;</span></section>
         <section><h6>Compass</h6></section>
-        <section id="Magdec">  <!-- Magnetic declination  -->
-            <label><i>angle</i></label>
-            <span></span>
-        </section>
+         <!--Magnetic declination  -->
+ <!--        <section id="Magdec">         
+                <label><i>angle</i></label>     
+               <span></span>    
+           </section>   
+ -->
         <section>
             <div class="compass">
                 <div class="arrow" id="compassDiscImg"></div>
@@ -83,7 +85,6 @@
 
 
     <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
-    <!--<script type="text/javascript" src="js/iottalk-api.js"></script>-->
     <script type="text/javascript" src="js/app.js"></script>
     <script type="text/javascript" >
     
@@ -91,7 +92,7 @@
         window.d_name = null;
         var show_dname_one_time = 0;
 
-        var interval = 10000;
+        var interval =500;  //this is the "PUSH"&"PULL" interval.
         var accur = 10;
         var eps = 0.001;
 
@@ -153,18 +154,17 @@
         window.addEventListener('deviceorientation', handleOrientation);
       
         //check vibration whether work
-	    if(!("vibrate" in navigator))
+        if(!("vibrate" in navigator))
             alert("Your browser don't support Vibration\n" );
 
-        //get the GPS infomation
+        /* get the GPS infomation */
         /*
-        if (navigator.geolocation) {
+        if (navigator.geolocation) 
             navigator.geolocation.getCurrentPosition(function(position) {
                 GEO.latitude = position.coords.latitude||0;
                 GEO.longitude = position.coords.longitude||0;
                 GEO.altitude = position.coords.altitude||0;
             });
-        }
         else
             alert("Not Support GPS");
         */
@@ -217,7 +217,7 @@
             setTimeout(iotUpdater, interval);
         }
 
-        //pull the vibration data from iottalk
+        //IoTtalk Pull
         function vibrationhandler(value){
             if(value > 0)
                 navigator.vibrate(value * 100);
